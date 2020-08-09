@@ -1,10 +1,6 @@
 using BookService;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Hosting;
 using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -37,7 +33,6 @@ namespace BookServiceTests.Controllers
             var response = await client.GetAsync(url);
 
             response.EnsureSuccessStatusCode(); 
-            Assert.
             
         }
 
