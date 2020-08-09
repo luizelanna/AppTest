@@ -7,6 +7,5 @@ namespace BookService.Interface
     public interface IRepositorio<TEntity> where TEntity : class
     {
         List<TEntity> GetAll();
-        IEnumerable<TEntity> Search(TEntity entity);
     }
 }

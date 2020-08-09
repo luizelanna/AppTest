@@ -1,9 +1,9 @@
 ﻿using BookService.Interface;
 using BookService.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 
 namespace BookService.Controllers
 {
@@ -22,22 +22,25 @@ namespace BookService.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Books>> Get()
         {
-            return _book.GetAll();
+            return Ok(_book.GetAll());
         }
 
         [HttpGet("buscar/{type}/{ordem?}")]
         public ActionResult<IEnumerable<Books>> GetBooks(string type, string ordem)
         {
-            IEnumerable<Books> enumerable = _book.GetLivro(type, ordem);
-            return enumerable.ToList();
+            return Ok(_book.GetLivro(type, ordem).ToList());
+            //return enumerable.ToList();
         }
 
         // GET api/values/5
         [HttpGet("frete/{id}")]
-        public ActionResult<string> GetFrete(int id)
+        public ActionResult<double> GetFrete(int id)
         {
-            var valor = _book.GetFrete(id);
-            return valor.ToString();            
+            if (string.IsNullOrEmpty(id.ToString()))
+            {
+                return NotFound();
+            }
+            return Ok(Convert.ToDouble(_book.GetFrete(id)));                      
         }
 
         //// POST api/values

@@ -8,16 +8,10 @@ namespace BookService.Repository
 {
     public class Repositorio<TEntity> : IRepositorio<TEntity>, IDisposable where TEntity : class
     {
-        private Context<TEntity> context = new Context<TEntity>();
+        private Contexto<TEntity> context = new Contexto<TEntity>();
         public List<TEntity> GetAll()
         {
             return context.Dados();
-        }
-
-        public IEnumerable<TEntity> Search(TEntity entity)
-        {            
-            var dados = context.Dados().AsQueryable();
-            return dados.Where(p=>p.Equals(entity)).ToList();
         }
 
         public void Dispose()

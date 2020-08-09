@@ -1,35 +1,79 @@
-﻿using BookService.Interface;
-using BookService.Models;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using BookService;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Hosting;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Xunit;
 
-namespace BookService.Controllers.Tests
+namespace BookServiceTests.Controllers
 {
-    [TestClass()]
-    public class BooksControllerTests
+    public class BooksControllerTests : IClassFixture<WebApplicationFactory<Startup>>
     {
+        protected readonly HttpClient _httpClient;
 
-        [TestMethod()]
-        public void BooksControllerTest()
+        private readonly WebApplicationFactory<Startup> _factory;
+
+        public BooksControllerTests(WebApplicationFactory<Startup> factory)
         {
-            Assert.Inconclusive();
+            _factory = factory;
         }
 
-        [TestMethod()]
-        public void GetTest()
+        [Theory]
+        [InlineData("/api/books")]
+        public async Task GetTest(string url)
         {
-            Assert.Fail();
+            var clientOptions = new WebApplicationFactoryClientOptions();
+            clientOptions.AllowAutoRedirect = true;
+            clientOptions.BaseAddress = new Uri("https://localhost:34999");
+            clientOptions.HandleCookies = true;
+            clientOptions.MaxAutomaticRedirections = 7;     
+            
+            var client = _factory.CreateClient(clientOptions);
+
+            var response = await client.GetAsync(url);
+
+            response.EnsureSuccessStatusCode(); 
+            Assert.
+            
         }
 
-        [TestMethod()]
-        public void GetBooksTest()
+        [Theory]
+        [InlineData("Journey")]
+        [InlineData("Luiz")]
+        public async Task GetLivrosTest(string type)
         {
-            Assert.Fail();
+            var clientOptions = new WebApplicationFactoryClientOptions();
+            clientOptions.AllowAutoRedirect = true;
+            clientOptions.BaseAddress = new Uri("https://localhost:34999");
+            clientOptions.HandleCookies = true;
+            clientOptions.MaxAutomaticRedirections = 7;
+            
+            var client = _factory.CreateClient(clientOptions);
+
+            var response = await client.GetAsync("/api/books/buscar/" + type);
+            response.EnsureSuccessStatusCode();
         }
 
-        [TestMethod()]
-        public void GetFreteTest()
+        [Theory]
+        [InlineData("1")]
+        [InlineData("5")]
+        [InlineData("6")]
+        public async Task GetFreteTest(string livroId)
         {
-            Assert.Fail();
+            var clientOptions = new WebApplicationFactoryClientOptions();
+            clientOptions.AllowAutoRedirect = true;
+            clientOptions.BaseAddress = new Uri("https://localhost:34999");
+            clientOptions.HandleCookies = true;
+            clientOptions.MaxAutomaticRedirections = 7;
+            
+            var client = _factory.CreateClient(clientOptions);
+
+            var response = await client.GetAsync("/api/books/frete/" + livroId);
+            response.EnsureSuccessStatusCode();
         }
     }
 }

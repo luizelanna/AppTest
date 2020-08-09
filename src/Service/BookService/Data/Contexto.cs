@@ -6,17 +6,20 @@ using System.IO;
 
 namespace BookService.Data
 {
-    public class Context<TEntity> : IDisposable where TEntity : class
+    public class Contexto<TEntity> : IDisposable where TEntity : class
     {
         private string arquivo = string.Concat(Path.GetFullPath(@"Json"), @"\book.json");
 
         public List<TEntity> Dados()
         {
             var retorno = new List<TEntity>();
+            if (!File.Exists(arquivo))
+            {
+                return null;
+            }
             using (StreamReader read = new StreamReader(arquivo))
             {
                 string json = read.ReadToEnd();
-                //json = json.Replace("\\", "");
 
                 retorno = JsonConvert.DeserializeObject<List<TEntity>>(json, new JsonSerializerSettings() { Culture = new CultureInfo("pt-BR") });
             }
